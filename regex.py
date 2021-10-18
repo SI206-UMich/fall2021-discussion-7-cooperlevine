@@ -33,9 +33,14 @@ def find_word(string_list):
     # loop through the found words and add the words to your empty list 
 
     #return the list of all words that start with the letter B, E, or T
-    pass
+    final_lst = []
+    regex_expression = r"\b([A-Za-z]+)\d{3}([A-Za-z]+)"
+    for line in string_list:
+        found = re.findall(regex_expression, line)
+        for word in found:
+            final_lst.append(word)
 
-
+    return final_lst
 def find_days(string_list):
     """ Return a list of days from the list of strings the dates format in the text are MM/DD/YYYY. """  
 
@@ -50,7 +55,13 @@ def find_days(string_list):
     # loop through the found dates and only add the days to your empty list 
     
     #return the list of days
-    pass
+    days_list = []
+    reg_exp = r"(\b\d{1,2}[\/](\d{1,2})[\/](\d{4})\b)"
+    for line in string_list:
+        found = re.findall(reg_exp, line)
+        for date in found:
+            days_list.append(date[1])
+    return days_list
 
 def find_domains(string_list):
     """ Return a list of web address domains from the list of strings the domains of a wbsite are after www. """
@@ -71,7 +82,14 @@ def find_domains(string_list):
     # add the domains to your empty list
     
     #return the list of domains
-    pass
+    domain_lst = []
+    reg_exp = r"https?://[\w.]+"
+    for line in string_list:
+        found = re.findall(reg_exp, line)
+        for website in found:
+            domain = website.split("//")[1].strip('www.')
+            domain_lst.append(domain)
+    return domain_lst
 
 class TestAllMethods(unittest.TestCase):
 
@@ -81,13 +99,13 @@ class TestAllMethods(unittest.TestCase):
         string_list = read_file('alice_ch_1.txt')
         word_list = find_word(string_list)
         self.assertEqual(len(word_list),4)
-    
+   
     def test_find_days(self):
         # read the lines from the file into a list of strings
         string_list = read_file('alice_ch_1.txt')
         days_list = find_days(string_list)
         self.assertEqual(days_list,['23', '12', '31', '4', '1', '4'])
-    
+  
     def test_domains(self):
         # read the lines from the file into a list of strings
         string_list = read_file('alice_ch_1.txt')
